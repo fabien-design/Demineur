@@ -3,21 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Démineurs</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Démineurs Cyberpunk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="btn-container">
-        <button id="stop">Stop Games</button>
-        <span id="numberOfFlagsRemaining"></span>
-        <button id="reset">Reset Game</button>
-        <select id="difficulty">
-            <option value="easy">Facile</option>
-            <option value="medium">Moyen</option>
-            <option value="hard">Difficile</option>
-        </select>
-    </div>    
-    <div id="board"></div>
+    <div class="game-container">
+        <div class="game-info">
+            <div class="btn-container">
+                <button id="start-stop">Start Game</button>
+                <button id="reset">Reset Game</button>
+                <span id="timer">00:00</span>
+                <p class="flag-count">Drapeau(x): <span id="numberOfFlagsRemaining"></span></p>
+                <select id="difficulty">
+                    <option value="easy">Facile</option>
+                    <option value="medium">Moyen</option>
+                    <option value="hard">Difficile</option>
+                </select>
+            </div>
+            <div id="board"></div>
+        </div>
+        <div class="leaderboard">
+            <h2>Meilleurs Scores</h2>
+            <div class="difficulty-tabs">
+                <button class="tab-btn active" data-difficulty="easy">Facile</button>
+                <button class="tab-btn" data-difficulty="medium">Moyen</button>
+                <button class="tab-btn" data-difficulty="hard">Difficile</button>
+            </div>
+            <div id="scores-list"></div>
+        </div>
+    </div>
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h2>Félicitations !</h2>
+            <p>Votre temps : <span id="final-time"></span></p>
+            <div class="input-group">
+                <label for="player-name">Votre nom :</label>
+                <input type="text" id="player-name" maxlength="20">
+            </div>
+            <button id="save-score">Sauvegarder</button>
+        </div>
+    </div>
+    <div id="lose-modal" class="modal">
+        <div class="modal-content">
+            <h2>Dommage !</h2>
+            <p>Votre temps : <span id="final-time"></span></p>
+            <p>Les mines ont explosées !</p>
+            <button id="close-modal">Fermer</button>
+        </div>
+    </div>
 </body>
 </html>
