@@ -42,8 +42,7 @@ class Minesweeper {
         this.gameStarted = false;
         this.board = [];
         this.difficulty = "easy";
-        
-        // Bind des méthodes pour les event listeners
+
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleRightClick = this.handleRightClick.bind(this);
@@ -54,6 +53,8 @@ class Minesweeper {
         this.handleTabClick = this.handleTabClick.bind(this);
 
         this.timer = {minutes: 0, seconds: 0};
+
+        this.initScoreBoard(this.difficulty);
         
         this.initializeGame();
     }
@@ -121,7 +122,6 @@ class Minesweeper {
         startStopButton.addEventListener("click", this.handleStartStop);
         saveScoreButton.addEventListener("click", this.handleSaveScore);
 
-        // Gestion des onglets du leaderboard
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.removeEventListener('click', this.handleTabClick);
             btn.addEventListener('click', this.handleTabClick);
@@ -207,6 +207,7 @@ class Minesweeper {
 
         if (x >= 0 && x < this.longueur && y >= 0 && y < this.hauteur) {
             this.currentHover = { x, y };
+            this.canvas.style.cursor = 'pointer';
         } else {
             this.currentHover = { x: -1, y: -1 };
         }
@@ -349,6 +350,10 @@ class Minesweeper {
         });
     }
 
+    initScoreBoard(difficulty) {
+        this.updateLeaderboard(difficulty);
+    }
+
     saveScore() {
         const playerName = document.getElementById("player-name").value.trim();
         if (!playerName) return;
@@ -364,16 +369,15 @@ class Minesweeper {
         let scores = JSON.parse(localStorage.getItem(`minesweeper_scores_${this.difficulty}`) || '[]');
         scores.push(score);
         scores.sort((a, b) => {
-            // if score is different, sort by score
             if (b.score !== a.score) {
                 return b.score - a.score;
             }
-            // if score is the same, sort by time
+
             const timeA = this.timeToSeconds(a.time);
             const timeB = this.timeToSeconds(b.time);
             return timeA - timeB;
         });
-        scores = scores.slice(0, 10); // Garde uniquement les 10 meilleurs scores
+        scores = scores.slice(0, 10);
 
         localStorage.setItem(`minesweeper_scores_${this.difficulty}`, JSON.stringify(scores));
         document.getElementById("win-modal").classList.remove("active");
@@ -456,16 +460,11 @@ class Minesweeper {
     }
 
     scoreCalculator() {
-        // Base score dépendant de la difficulté
         const baseScore = this.mines * this.difficultySettings[this.difficulty].scoreMultiplier;
-        
-        // Facteur temps : plus le temps est court, plus le multiplicateur est élevé
-        // Convertir le temps en minutes
+
         const timeInMinutes = this.timer.minutes + (this.timer.seconds / 60);
         const timeMultiplier = Math.max(1, 10 - (timeInMinutes / 2)); // 10 au début, diminue avec le temps
-        
-        // Facteur efficacité : ratio entre les mines et le nombre de mouvements
-        // Plus le ratio est proche de 1, meilleur est le score
+
         const efficiencyRatio = this.mines / this.playerMoves;
         const efficiencyMultiplier = Math.min(4, efficiencyRatio * 2); // Maximum 4x multiplicateur
         
@@ -572,7 +571,6 @@ class Minesweeper {
     }
 }
 
-// Démarrage du jeu
 document.addEventListener("DOMContentLoaded", () => {
     new Minesweeper();
 });

@@ -141,6 +141,7 @@ select option {
     gap: 40px;
     align-items: flex-start;
     max-width: 1200px;
+    flex-wrap: wrap;
     margin: 0 auto;
 }
 
